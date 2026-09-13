@@ -3,10 +3,10 @@ import {
   applyRequestAuthPolicy,
   mapApiResponseError,
 } from "@/lib/api-auth-policy";
-import { urlPublicaClienteBolivianpets } from "@/lib/origen-api-bolivianpets";
+import { bolivianpetsPublicClientUrl } from "@/lib/bolivianpets-api-origin";
 
 const api = axios.create({
-  baseURL: urlPublicaClienteBolivianpets(),
+  baseURL: bolivianpetsPublicClientUrl(),
   timeout: 30_000,
   headers: { "Content-Type": "application/json" },
 });
@@ -23,6 +23,6 @@ api.interceptors.response.use(
 
 export default api;
 
-export function obtenerUrlBaseBolivianpets() {
-  return api.defaults.baseURL ?? urlPublicaClienteBolivianpets();
+export function getBolivianpetsBaseUrl() {
+  return api.defaults.baseURL ?? bolivianpetsPublicClientUrl();
 }

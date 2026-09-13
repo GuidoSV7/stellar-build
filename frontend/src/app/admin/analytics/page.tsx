@@ -1,8 +1,8 @@
 "use client";
 
-import ContenidoAnaliticaCentral from "../_componentes/analytics/ContenidoAnaliticaCentral";
-import CabeceraDashboard from "../_componentes/dashboard/CabeceraDashboard";
-import TarjetasKpiDashboard from "../_componentes/dashboard/TarjetasKpiDashboard";
+import CentralAnalyticsContent from "../_components/analytics/CentralAnalyticsContent";
+import DashboardHeader from "../_components/dashboard/DashboardHeader";
+import DashboardKpiCards from "../_components/dashboard/DashboardKpiCards";
 
 // Pagina Analitica: misma cabecera y KPIs que el panel; abajo graficos y tablas demo.
 export default function PaginaAnalytics() {
@@ -22,9 +22,9 @@ export default function PaginaAnalytics() {
 
   return (
     <>
-      <CabeceraDashboard alExportar={exportarDatos} />
-      <TarjetasKpiDashboard />
-      <ContenidoAnaliticaCentral />
+      <DashboardHeader alExportar={exportarDatos} />
+      <DashboardKpiCards />
+      <CentralAnalyticsContent />
     </>
   );
 }

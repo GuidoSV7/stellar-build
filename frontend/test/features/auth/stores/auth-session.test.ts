@@ -3,11 +3,11 @@
  */
 import { describe, it, expect, beforeEach } from "vitest";
 import {
-  guardarSesionBolivianpets,
-  obtenerSesionBolivianpets,
-  cerrarSesion,
-  obtenerTokenSesion,
-  obtenerSesion,
+  saveBolivianpetsSession,
+  getBolivianpetsSession,
+  clearSession,
+  getSessionToken,
+  getSession,
 } from "@/stores/auth-session";
 
 function installMemoryLocalStorage() {
@@ -61,7 +61,7 @@ describe("auth-session store", () => {
   });
 
   it("persiste y recupera token y usuario merchant", () => {
-    guardarSesionBolivianpets({
+    saveBolivianpetsSession({
       token: "jwt-abc",
       user: {
         id: "u1",
@@ -73,23 +73,44 @@ describe("auth-session store", () => {
       },
     });
 
-    const sesion = obtenerSesionBolivianpets();
+    const sesion = getBolivianpetsSession();
     expect(sesion?.token).toBe("jwt-abc");
     expect(sesion?.user.email).toBe("Merchant@Test.App");
-    expect(obtenerTokenSesion()).toBe("jwt-abc");
-    expect(obtenerSesion()).toEqual({
+    expect(getSessionToken()).toBe("jwt-abc");
+    expect(getSession()).toEqual({
       email: "merchant@test.app",
-      rol: "merchant",
+      role: "merchant",
     });
   });
 
   it("devuelve null si el JSON en localStorage es inválido", () => {
-    localStorage.setItem("bolivianpets_sesion_v1", "{not-json");
-    expect(obtenerSesionBolivianpets()).toBeNull();
+    localStorage.setItem("bolivianpets_session_v1", "{not-json");
+    expect(getBolivianpetsSession()).toBeNull();
   });
 
-  it("cerrarSesion elimina la clave", () => {
-    guardarSesionBolivianpets({
+  it("lee sesión legacy y migra al guardar", () => {
+    localStorage.setItem(
+      "bolivianpets_sesion_v1",
+      JSON.stringify({
+        token: "legacy",
+        user: {
+          id: "1",
+          fullName: "Legacy",
+          email: "legacy@test.app",
+          role: "admin",
+          country: "BO",
+          walletAddress: null,
+        },
+      }),
+    );
+    expect(getBolivianpetsSession()?.token).toBe("legacy");
+    saveBolivianpetsSession(getBolivianpetsSession()!);
+    expect(localStorage.getItem("bolivianpets_session_v1")).toBeTruthy();
+    expect(localStorage.getItem("bolivianpets_sesion_v1")).toBeNull();
+  });
+
+  it("clearSession elimina la clave", () => {
+    saveBolivianpetsSession({
       token: "t",
       user: {
         id: "1",
@@ -100,7 +121,7 @@ describe("auth-session store", () => {
         walletAddress: null,
       },
     });
-    cerrarSesion();
-    expect(obtenerSesionBolivianpets()).toBeNull();
+    clearSession();
+    expect(getBolivianpetsSession()).toBeNull();
   });
 });

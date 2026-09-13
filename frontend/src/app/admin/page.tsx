@@ -1,11 +1,11 @@
 "use client";
 
-import CabeceraDashboard from "./_componentes/dashboard/CabeceraDashboard";
-import GraficoBarrasIngresos from "./_componentes/dashboard/GraficoBarrasIngresos";
-import GraficoVolumenTransacciones from "./_componentes/dashboard/GraficoVolumenTransacciones";
-import SeccionRentabilidadDashboard from "./_componentes/dashboard/SeccionRentabilidadDashboard";
-import TarjetasKpiDashboard from "./_componentes/dashboard/TarjetasKpiDashboard";
-import estilosLayout from "./_componentes/layout-dashboard.module.css";
+import DashboardHeader from "./_components/dashboard/DashboardHeader";
+import RevenueBarChart from "./_components/dashboard/RevenueBarChart";
+import TransactionVolumeChart from "./_components/dashboard/TransactionVolumeChart";
+import DashboardProfitabilitySection from "./_components/dashboard/DashboardProfitabilitySection";
+import DashboardKpiCards from "./_components/dashboard/DashboardKpiCards";
+import estilosLayout from "./_components/layout-dashboard.module.css";
 
 // Pagina principal del admin: KPIs y gráficos conectados al API (series + métricas escrow).
 export default function PaginaAdmin() {
@@ -25,13 +25,13 @@ export default function PaginaAdmin() {
 
   return (
     <>
-      <CabeceraDashboard alExportar={exportarDatos} />
-      <TarjetasKpiDashboard />
+      <DashboardHeader alExportar={exportarDatos} />
+      <DashboardKpiCards />
       <div className={estilosLayout.filaGraficos}>
-        <GraficoBarrasIngresos />
-        <GraficoVolumenTransacciones />
+        <RevenueBarChart />
+        <TransactionVolumeChart />
       </div>
-      <SeccionRentabilidadDashboard />
+      <DashboardProfitabilitySection />
     </>
   );
 }

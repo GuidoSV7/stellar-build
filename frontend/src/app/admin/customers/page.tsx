@@ -4,32 +4,32 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import {
-  ErrorApiBolivianpets,
-  listarUsuariosAdmin,
-  type UsuarioBolivianpetsRespuesta,
-} from "../../_lib/apiBolivianpets";
-import { cerrarSesion, obtenerTokenSesion } from "../../demoAuth";
-import CabeceraDashboard from "../_componentes/dashboard/CabeceraDashboard";
-import TablaListaClientes from "../_componentes/clientes/TablaListaClientes";
-import TarjetasKpiClientes from "../_componentes/clientes/TarjetasKpiClientes";
-import ModalDetalleUsuarioAdmin from "../_componentes/clientes/ModalDetalleUsuarioAdmin";
-import estilosLista from "../_componentes/clientes/lista-clientes.module.css";
+  BolivianpetsApiError,
+  listAdminUsers,
+  type BolivianpetsUserResponse,
+} from "../../_lib/bolivianpets-api";
+import { clearSession, getSessionToken } from "../../demoAuth";
+import DashboardHeader from "../_components/dashboard/DashboardHeader";
+import CustomersListTable from "../_components/customers/CustomersListTable";
+import CustomersKpiCards from "../_components/customers/CustomersKpiCards";
+import AdminUserDetailModal from "../_components/customers/AdminUserDetailModal";
+import estilosLista from "../_components/customers/customers-list.module.css";
 
 const LIMITE_POR_PAGINA = 10;
 
 // Solo comercios (merchant): GET /admin/users?role=merchant — sin cuentas admin.
-export default function PaginaCustomers() {
+export default function CustomersPage() {
   const router = useRouter();
   const [consulta, setConsulta] = useState("");
   const [pagina, setPagina] = useState(1);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [usuarios, setUsuarios] = useState<UsuarioBolivianpetsRespuesta[]>([]);
+  const [usuarios, setUsuarios] = useState<BolivianpetsUserResponse[]>([]);
   const [totalRegistros, setTotalRegistros] = useState(0);
   const [idUsuarioModal, setIdUsuarioModal] = useState<string | null>(null);
 
   const cargar = useCallback(async () => {
-    const token = obtenerTokenSesion();
+    const token = getSessionToken();
     if (!token) {
       setCargando(false);
       return;
@@ -37,18 +37,18 @@ export default function PaginaCustomers() {
     setCargando(true);
     setError(null);
     try {
-      const { usuarios: lista, total } = await listarUsuariosAdmin(token, pagina, LIMITE_POR_PAGINA, {
+      const { usuarios: lista, total } = await listAdminUsers(token, pagina, LIMITE_POR_PAGINA, {
         role: "merchant",
       });
       setUsuarios(lista);
       setTotalRegistros(total);
     } catch (e) {
-      if (e instanceof ErrorApiBolivianpets && e.codigoEstado === 401) {
-        cerrarSesion();
+      if (e instanceof BolivianpetsApiError && e.codigoEstado === 401) {
+        clearSession();
         router.replace("/");
         return;
       }
-      setError(e instanceof ErrorApiBolivianpets ? e.message : "No se pudo cargar el listado.");
+      setError(e instanceof BolivianpetsApiError ? e.message : "No se pudo cargar el listado.");
       setUsuarios([]);
       setTotalRegistros(0);
     } finally {
@@ -93,7 +93,7 @@ export default function PaginaCustomers() {
 
   return (
     <>
-      <CabeceraDashboard
+      <DashboardHeader
         alExportar={exportarCsv}
         titulo="Clientes"
         subtitulo="Comercios (rol merchant). Las cuentas administrador no aparecen en este listado."
@@ -101,7 +101,7 @@ export default function PaginaCustomers() {
       {error ? (
         <p style={{ marginBottom: 16, color: "#b91c1c", fontWeight: 700 }}>{error}</p>
       ) : null}
-      <TarjetasKpiClientes totalRegistros={totalRegistros} usuariosPagina={usuarios} />
+      <CustomersKpiCards totalRegistros={totalRegistros} usuariosPagina={usuarios} />
       <div className={estilosLista.barraHerramientas}>
         <input
           type="search"
@@ -134,20 +134,20 @@ export default function PaginaCustomers() {
           </button>
         </div>
       </div>
-      <TablaListaClientes
+      <CustomersListTable
         usuarios={usuariosFiltrados}
         onVerDetalle={(idUsuario) => setIdUsuarioModal(idUsuario)}
       />
 
       {idUsuarioModal ? (
-        <ModalDetalleUsuarioAdmin
+        <AdminUserDetailModal
           abierta={true}
           idUsuario={idUsuarioModal}
-          alCerrar={() => {
+          onClose={() => {
             setIdUsuarioModal(null);
             void cargar();
           }}
-          alActualizarLista={() => void cargar()}
+          onListRefresh={() => void cargar()}
         />
       ) : null}
     </>

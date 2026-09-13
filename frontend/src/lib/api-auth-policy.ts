@@ -1,8 +1,8 @@
 import type { InternalAxiosRequestConfig } from "axios";
-import { obtenerTokenSesion } from "@/stores/auth-session";
+import { getSessionToken } from "@/stores/auth-session";
 
 export function applyRequestAuthPolicy(config: InternalAxiosRequestConfig) {
-  const token = obtenerTokenSesion();
+  const token = getSessionToken();
   if (token) {
     config.headers.set("Authorization", `Bearer ${token}`);
   }

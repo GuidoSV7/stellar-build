@@ -1,72 +1,77 @@
-export type RolSesion = "admin" | "merchant";
+export type SessionRole = "admin" | "merchant";
 
-export type UsuarioSesion = {
+export type SessionUser = {
   id: string;
   fullName: string;
   email: string;
-  role: RolSesion;
+  role: SessionRole;
   country: string;
   walletAddress: string | null;
   isVerified?: boolean;
   isActive?: boolean;
 };
 
-export type DatosSesionBolivianpets = {
+export type BolivianpetsSessionData = {
   token: string;
-  user: UsuarioSesion;
+  user: SessionUser;
 };
 
-const CLAVE_SESION = "bolivianpets_sesion_v1";
+const SESSION_KEY = "bolivianpets_session_v1";
+const LEGACY_SESSION_KEY = "bolivianpets_sesion_v1";
 
-function normalizarEmail(email: string) {
+function normalizeEmail(email: string) {
   return email.trim().toLowerCase();
 }
 
-export function guardarSesionBolivianpets(datos: DatosSesionBolivianpets) {
+export function saveBolivianpetsSession(data: BolivianpetsSessionData) {
   if (typeof window === "undefined") return;
   try {
-    window.localStorage.setItem(CLAVE_SESION, JSON.stringify(datos));
+    window.localStorage.setItem(SESSION_KEY, JSON.stringify(data));
+    window.localStorage.removeItem(LEGACY_SESSION_KEY);
   } catch {
     /* storage unavailable */
   }
 }
 
-export function obtenerSesionBolivianpets(): DatosSesionBolivianpets | null {
+export function getBolivianpetsSession(): BolivianpetsSessionData | null {
   if (typeof window === "undefined") return null;
   try {
-    const crudo = window.localStorage.getItem(CLAVE_SESION);
-    if (!crudo) return null;
-    const datos = JSON.parse(crudo) as DatosSesionBolivianpets;
+    const raw =
+      window.localStorage.getItem(SESSION_KEY) ??
+      window.localStorage.getItem(LEGACY_SESSION_KEY);
+    if (!raw) return null;
+    const data = JSON.parse(raw) as BolivianpetsSessionData;
     if (
-      !datos?.token ||
-      !datos?.user?.email ||
-      (datos.user.role !== "admin" && datos.user.role !== "merchant")
+      !data?.token ||
+      !data?.user?.email ||
+      (data.user.role !== "admin" && data.user.role !== "merchant")
     ) {
       return null;
     }
-    return datos;
+    return data;
   } catch {
     return null;
   }
 }
 
-export function obtenerTokenSesion(): string | null {
-  return obtenerSesionBolivianpets()?.token ?? null;
+export function getSessionToken(): string | null {
+  return getBolivianpetsSession()?.token ?? null;
 }
 
-export function actualizarUsuarioEnSesion(usuario: UsuarioSesion) {
-  const actual = obtenerSesionBolivianpets();
-  if (!actual) return;
-  guardarSesionBolivianpets({ token: actual.token, user: usuario });
+export function updateUserInSession(user: SessionUser) {
+  const current = getBolivianpetsSession();
+  if (!current) return;
+  saveBolivianpetsSession({ token: current.token, user });
 }
 
-export function cerrarSesion() {
+export function clearSession() {
   if (typeof window === "undefined") return;
-  window.localStorage.removeItem(CLAVE_SESION);
+  window.localStorage.removeItem(SESSION_KEY);
+  window.localStorage.removeItem(LEGACY_SESSION_KEY);
 }
 
-export function obtenerSesion(): { email: string; rol: RolSesion } | null {
-  const s = obtenerSesionBolivianpets();
+export function getSession(): { email: string; role: SessionRole } | null {
+  const s = getBolivianpetsSession();
   if (!s) return null;
-  return { email: normalizarEmail(s.user.email), rol: s.user.role };
+  return { email: normalizeEmail(s.user.email), role: s.user.role };
 }

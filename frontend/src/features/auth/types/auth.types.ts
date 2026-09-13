@@ -1,19 +1,19 @@
-export type RolBolivianpetsApi = "admin" | "merchant";
+export type BolivianpetsApiRole = "admin" | "merchant";
 
-export type UsuarioBolivianpetsRespuesta = {
+export type BolivianpetsUserResponse = {
   id: string;
   fullName: string;
   email: string;
-  role: RolBolivianpetsApi;
+  role: BolivianpetsApiRole;
   country: string;
   walletAddress: string | null;
   isVerified?: boolean;
   isActive?: boolean;
 };
 
-export type RespuestaLoginRegistro = {
-  user: UsuarioBolivianpetsRespuesta;
+export type LoginRegisterResponse = {
+  user: BolivianpetsUserResponse;
   token: string;
 };
 
-export type ModoModal = "ingresar" | "registrar";
+export type AuthModalMode = "sign-in" | "sign-up";

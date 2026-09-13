@@ -1,1 +1,1 @@
-export { default as PaginaCompraSegura } from "@/app/_componentes/inicio/PaginaCompraSegura";
+export { default as SafePurchasePage } from "@/app/_components/home/SafePurchasePage";

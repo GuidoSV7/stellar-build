@@ -1,10 +1,10 @@
 import api from "@/lib/axios";
 import type {
-  RespuestaLoginRegistro,
-  UsuarioBolivianpetsRespuesta,
+  LoginRegisterResponse,
+  BolivianpetsUserResponse,
 } from "@/features/auth/types/auth.types";
 
-export async function iniciarSesionBolivianpets(
+export async function signInBolivianpetsUser(
   correo: string,
   contrasena: string,
   walletAddress?: string,
@@ -15,11 +15,11 @@ export async function iniciarSesionBolivianpets(
   };
   const w = walletAddress?.trim();
   if (w) cuerpo.walletAddress = w;
-  const { data } = await api.post<RespuestaLoginRegistro>("/auth/login", cuerpo);
+  const { data } = await api.post<LoginRegisterResponse>("/auth/login", cuerpo);
   return data;
 }
 
-export async function registrarUsuarioBolivianpets(cuerpo: {
+export async function registerBolivianpetsUser(cuerpo: {
   email: string;
   password: string;
   fullName: string;
@@ -40,19 +40,19 @@ export async function registrarUsuarioBolivianpets(cuerpo: {
   };
   const w = cuerpo.walletAddress?.trim();
   if (w) payload.walletAddress = w;
-  const { data } = await api.post<RespuestaLoginRegistro>("/auth/register", payload);
+  const { data } = await api.post<LoginRegisterResponse>("/auth/register", payload);
   return data;
 }
 
 export async function obtenerPerfilAuth(token: string) {
-  const { data } = await api.get<UsuarioBolivianpetsRespuesta>("/auth/profile", {
+  const { data } = await api.get<BolivianpetsUserResponse>("/auth/profile", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return data;
 }
 
 export async function obtenerUsuarioYo(token: string) {
-  const { data } = await api.get<UsuarioBolivianpetsRespuesta>("/users/me", {
+  const { data } = await api.get<BolivianpetsUserResponse>("/users/me", {
     headers: { Authorization: `Bearer ${token}` },
   });
   return data;

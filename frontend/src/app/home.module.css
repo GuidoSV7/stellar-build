@@ -417,7 +417,7 @@
   line-height: 1.5;
 }
 
-.modalCerrar {
+.modonClose {
   width: 40px;
   height: 40px;
   border-radius: 12px;
@@ -429,7 +429,7 @@
   line-height: 1;
 }
 
-.modalCerrar:hover {
+.modonClose:hover {
   background: rgba(236, 245, 255, 0.06);
 }
 

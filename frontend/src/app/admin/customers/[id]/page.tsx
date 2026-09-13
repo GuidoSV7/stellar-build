@@ -2,7 +2,7 @@
 
 import { useParams } from "next/navigation";
 
-import VistaDetalleUsuarioAdmin from "../../_componentes/clientes/VistaDetalleUsuarioAdmin";
+import AdminUserDetailView from "../../_components/customers/AdminUserDetailView";
 
 // Detalle de usuario admin: GET /admin/users/:id y acciones PATCH / toggle-active.
 export default function PaginaDetalleCliente() {
@@ -13,5 +13,5 @@ export default function PaginaDetalleCliente() {
     return <p style={{ fontWeight: 700 }}>ID no válido.</p>;
   }
 
-  return <VistaDetalleUsuarioAdmin idUsuario={id} mostrarConfiguracion />;
+  return <AdminUserDetailView idUsuario={id} mostrarConfiguracion />;
 }

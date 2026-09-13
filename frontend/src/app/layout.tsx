@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
-import ProveedorNotificaciones from "./_componentes/ProveedorNotificaciones";
-import ProveedoresApp from "./providers";
+import NotificationsProvider from "./_components/NotificationsProvider";
+import AppProviders from "./providers";
 import "./globals.css";
-import ProveedorTemaPorRuta from "./tema/ProveedorTemaPorRuta";
+import RouteThemeProvider from "./theme/RouteThemeProvider";
 import { siteName, siteUrl } from "@/config/site";
 
 const fuenteSans = Space_Grotesk({
@@ -42,11 +42,11 @@ export default function LayoutRaiz({
   return (
     <html lang="es" className={`${fuenteSans.variable} ${fuenteMono.variable}`}>
       <body suppressHydrationWarning>
-        <ProveedorTemaPorRuta>
-          <ProveedoresApp>
-            <ProveedorNotificaciones>{contenido}</ProveedorNotificaciones>
-          </ProveedoresApp>
-        </ProveedorTemaPorRuta>
+        <RouteThemeProvider>
+          <AppProviders>
+            <NotificationsProvider>{contenido}</NotificationsProvider>
+          </AppProviders>
+        </RouteThemeProvider>
       </body>
     </html>
   );

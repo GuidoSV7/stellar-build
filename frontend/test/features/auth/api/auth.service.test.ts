@@ -8,9 +8,9 @@ vi.mock("@/lib/axios", () => ({
 }));
 
 import api from "@/lib/axios";
-import { iniciarSesionBolivianpets } from "@/features/auth/api/auth.service";
+import { signInBolivianpetsUser } from "@/features/auth/api/auth.service";
 
-describe("iniciarSesionBolivianpets", () => {
+describe("signInBolivianpetsUser", () => {
   beforeEach(() => {
     vi.mocked(api.post).mockReset();
   });
@@ -20,7 +20,7 @@ describe("iniciarSesionBolivianpets", () => {
       data: { token: "t", user: { id: "1", email: "a@test.app" } },
     });
 
-    await iniciarSesionBolivianpets("  a@test.app  ", "secret", "  wallet123  ");
+    await signInBolivianpetsUser("  a@test.app  ", "secret", "  wallet123  ");
 
     expect(api.post).toHaveBeenCalledWith("/auth/login", {
       email: "a@test.app",
@@ -34,7 +34,7 @@ describe("iniciarSesionBolivianpets", () => {
       data: { token: "t", user: { id: "1", email: "a@test.app" } },
     });
 
-    await iniciarSesionBolivianpets("a@test.app", "secret", "   ");
+    await signInBolivianpetsUser("a@test.app", "secret", "   ");
 
     expect(api.post).toHaveBeenCalledWith("/auth/login", {
       email: "a@test.app",
@@ -43,20 +43,20 @@ describe("iniciarSesionBolivianpets", () => {
   });
 });
 
-describe("registrarUsuarioBolivianpets", () => {
+describe("registerBolivianpetsUser", () => {
   beforeEach(() => {
     vi.mocked(api.post).mockReset();
   });
 
   it("normaliza email y wallet en POST /auth/register", async () => {
-    const { registrarUsuarioBolivianpets } = await import(
+    const { registerBolivianpetsUser } = await import(
       "@/features/auth/api/auth.service"
     );
     vi.mocked(api.post).mockResolvedValue({
       data: { token: "t", user: { id: "1", email: "n@test.app" } },
     });
 
-    await registrarUsuarioBolivianpets({
+    await registerBolivianpetsUser({
       email: "  n@test.app ",
       password: "123456",
       fullName: "  Nombre ",

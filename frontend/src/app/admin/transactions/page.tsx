@@ -1,20 +1,20 @@
 "use client";
 
-import CabeceraDashboard from "../_componentes/dashboard/CabeceraDashboard";
-import TablaTransaccionesAdmin from "../_componentes/transacciones/TablaTransaccionesAdmin";
-import TarjetasKpiTransacciones from "../_componentes/transacciones/TarjetasKpiTransacciones";
-import { transaccionesOrdenadasReciente } from "../_datos/datosCuentasAdminDemo";
+import DashboardHeader from "../_components/dashboard/DashboardHeader";
+import AdminTransactionsTable from "../_components/transactions/AdminTransactionsTable";
+import TransactionsKpiCards from "../_components/transactions/TransactionsKpiCards";
+import { recentTransactionsSorted } from "../_data/adminAccountsDemoData";
 
 // Registro global de transacciones (demo) enlazado a clientes por id interno.
-export default function PaginaTransactions() {
-  const filas = transaccionesOrdenadasReciente();
+export default function TransactionsPage() {
+  const filas = recentTransactionsSorted();
 
   const exportarCsv = () => {
     const lineas = [
       "id,id_cliente,tipo,monto,activo,estado,fecha",
       ...filas.map(
         (t) =>
-          `${t.id},${t.idCliente},${t.tipo},${t.monto},${t.activo},${t.estado},${t.fecha}`,
+          `${t.id},${t.customerId},${t.tipo},${t.monto},${t.activo},${t.estado},${t.fecha}`,
       ),
     ];
     const blob = new Blob([lineas.join("\n")], { type: "text/csv;charset=utf-8;" });
@@ -28,13 +28,13 @@ export default function PaginaTransactions() {
 
   return (
     <>
-      <CabeceraDashboard
+      <DashboardHeader
         alExportar={exportarCsv}
         titulo="Transacciones"
         subtitulo="Historial de pagos y estados de escrow en la red Solana (datos de demostracion)."
       />
-      <TarjetasKpiTransacciones />
-      <TablaTransaccionesAdmin
+      <TransactionsKpiCards />
+      <AdminTransactionsTable
         filas={filas}
         mostrarColumnaCliente
         titulo="Registro de movimientos"
