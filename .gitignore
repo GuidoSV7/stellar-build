@@ -20,3 +20,9 @@ build/
 **/obj/
 *.user
 *.suo
+
+# Cursor local (no versionar)
+.cursor/
+backend/.cursor/
+frontend/.cursor/
+contract/.cursor/
