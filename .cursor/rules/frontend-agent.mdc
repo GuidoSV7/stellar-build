@@ -1,0 +1,46 @@
+---
+description: Punto de entrada del agente para el frontend BolivianPets (Next.js + Stellar). Enruta a skills y define autoinvocación obligatoria.
+alwaysApply: true
+globs:
+  - frontend/**
+---
+
+# AGENTS.md — Frontend (BolivianPets / stellar-build)
+
+Punto de entrada del agente en el frontend. Este archivo (`.cursor/rules/frontend-agent.mdc`) se enlaza como `frontend/.cursor/rules/agent.mdc` (symlink). Subagent principal: `frontend/.cursor/agents/frontend.md`.
+
+## Git
+
+- **Nunca** poner `Co-authored-by: Cursor` (ni variantes `cursoragent` / `*@cursor*`) en commits.
+
+## Stack
+
+- **Next.js 16** (App Router) + TypeScript estricto — package `frontend/`
+- Alias `@/*` → `./src/*`
+- **Estilos**: CSS Modules (`*.module.css`) vigentes; skill Tailwind cuando se introduzca Tailwind
+- **Estado servidor**: TanStack Query
+- **Estado cliente**: Zustand (cuando aplique); sesión JWT en `src/stores/`
+- **HTTP**: Axios `@/lib/axios`; legacy `src/app/_lib/` / `bolivianpets-api` durante migración
+- **Chain**: Stellar (no Solana) — wallet / dApp vía skills `.cursor/skills/stellar/dapp`
+- **Testing**: Vitest (`npm test` en `frontend/`)
+
+## 🤖 Autoinvocación de Skills — OBLIGATORIO
+
+| Tarea | Skill a leer |
+|---|---|
+| Crear/modificar página, componente, feature, hook o layout | `.cursor/skills/bolivianpets-frontend/SKILL.md` + `.cursor/skills/nextjs/SKILL.md` |
+| Estilos Tailwind (si aplica) | `.cursor/skills/tailwind-4/SKILL.md` |
+| Schemas / validación Zod | `.cursor/skills/zod-4/SKILL.md` |
+| SEO técnico / contenido | `.cursor/skills/seo/SKILL.md` |
+| Metadata, sitemap, robots, OG en Next.js | `.cursor/skills/nextjs-seo/SKILL.md` |
+| Stitch → React | `.cursor/skills/stitch/SKILL.md` |
+| Tests unitarios Vitest | `.cursor/skills/vitest-frontend-testing/SKILL.md` |
+| E2E Playwright | `.cursor/skills/playwright-e2e-next/SKILL.md` |
+| Stellar dApp / wallet / contratos desde FE | `.cursor/skills/stellar/dapp/SKILL.md` (+ companions en `.cursor/skills/stellar/`) |
+
+## Enrutamiento de contexto
+
+- Detalle operativo: `frontend/.cursor/agents/frontend.md`
+- Overlay producto: `.cursor/skills/bolivianpets-frontend/SKILL.md`
+- Skills compartidas: solo en `.cursor/skills/` (raíz monorepo)
+- Gate: `cd frontend && npm run build` (y `npm test` si toca tests)

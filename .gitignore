@@ -1,0 +1,22 @@
+# Local / tooling
+node_modules/
+dist/
+build/
+.next/
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+
+# AI runtime (local)
+.atl/
+.engram/
+.codegraph/
+.opencode/
+
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo

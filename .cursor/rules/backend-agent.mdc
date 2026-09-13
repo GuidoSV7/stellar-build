@@ -1,0 +1,37 @@
+---
+description: Punto de entrada del agente para el backend BolivianPets (ASP.NET Core). Enruta a skills y define autoinvocación obligatoria.
+alwaysApply: true
+globs:
+  - backend/**
+---
+
+# AGENTS.md — Backend (BolivianPets / stellar-build)
+
+Punto de entrada del agente en el backend. Este archivo (`.cursor/rules/backend-agent.mdc`) se enlaza como `backend/.cursor/rules/agent.mdc` (symlink). Subagent principal: `backend/.cursor/agents/backend.md`.
+
+## Git
+
+- **Nunca** poner `Co-authored-by: Cursor` (ni variantes `cursoragent` / `*@cursor*`) en commits.
+
+## Stack
+
+- **ASP.NET Core** (`net10.0`) — solution `backend/BolivianPets.slnx`, proyecto `backend/src/Api`
+- OpenAPI (`Microsoft.AspNetCore.OpenApi`)
+- Persistencia / auth / módulos: definir según evolución del API (ver overlay)
+
+## 🤖 Autoinvocación de Skills — OBLIGATORIO
+
+| Tarea | Skill a leer |
+|---|---|
+| Convención de producto / capas BolivianPets | `.cursor/skills/bolivianpets-backend/SKILL.md` |
+| Seguridad de endpoints, inputs, auth | `.cursor/skills/backend-security-rules/SKILL.md` + `.cursor/skills/owasp-top10/SKILL.md` |
+| Calidad / complejidad | `.cursor/skills/sonar-code-quality/SKILL.md` |
+| Integración Stellar desde API | `.cursor/skills/stellar/dapp/SKILL.md` / `.cursor/skills/stellar/data/SKILL.md` según alcance |
+
+> Las skills NestJS/TypeORM/Drizzle en `.cursor/skills/` son del toolkit monorepo (legado TrustPay/Timi). **No** las uses como stack por defecto de este backend .NET.
+
+## Enrutamiento de contexto
+
+- Detalle operativo: `backend/.cursor/agents/backend.md`
+- Overlay producto: `.cursor/skills/bolivianpets-backend/SKILL.md`
+- Gate: `dotnet build backend/BolivianPets.slnx`
