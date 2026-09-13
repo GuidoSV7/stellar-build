@@ -10,8 +10,53 @@ import {
   obtenerSesion,
 } from "@/stores/auth-session";
 
+function installMemoryLocalStorage() {
+  const store = new Map<string, string>();
+  const memory: Storage = {
+    get length() {
+      return store.size;
+    },
+    clear() {
+      store.clear();
+    },
+    getItem(key: string) {
+      return store.has(key) ? store.get(key)! : null;
+    },
+    key(index: number) {
+      return [...store.keys()][index] ?? null;
+    },
+    removeItem(key: string) {
+      store.delete(key);
+    },
+    setItem(key: string, value: string) {
+      store.set(key, String(value));
+    },
+  };
+
+  Object.defineProperty(globalThis, "localStorage", {
+    value: memory,
+    configurable: true,
+    writable: true,
+  });
+
+  if (typeof globalThis.window === "undefined") {
+    Object.defineProperty(globalThis, "window", {
+      value: globalThis,
+      configurable: true,
+      writable: true,
+    });
+  } else {
+    Object.defineProperty(globalThis.window, "localStorage", {
+      value: memory,
+      configurable: true,
+      writable: true,
+    });
+  }
+}
+
 describe("auth-session store", () => {
   beforeEach(() => {
+    installMemoryLocalStorage();
     localStorage.clear();
   });
 

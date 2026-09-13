@@ -1,1 +1,2 @@
-# Skills Stellar (stellar.new) viven en `.claude/skills/`.
+# Skills operativas: solo `.cursor/skills/` (Stellar en `.cursor/skills/stellar/`).
+# `.claude/` puede existir en el repo; el agente no la usa.
